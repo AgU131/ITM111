@@ -147,6 +147,7 @@ GROUP BY model_year WITH ROLLUP
 HAVING AVG(list_price) > 300;
 
 
+
 USE magazine;
 
 SELECT magazineName, COUNT(subscriberKey) AS suscribers
@@ -156,6 +157,25 @@ FROM magazine m
 GROUP BY magazineName
 HAVING suscribers >= 2;
 
+
+USE bike;
+
+SELECT store_name, product_name, SUM(quantity)
+FROM store s
+	JOIN stock st
+		ON s.store_id = st.store_id
+	JOIN product p
+		ON st.product_id = p.product_id
+GROUP BY product_name, store_name WITH ROLLUP;
+
+SELECT store_name, product_name, SUM(quantity)
+FROM store s
+	JOIN stock st
+		ON s.store_id = st.store_id
+	JOIN product p
+		ON st.product_id = p.product_id
+WHERE product_name LIKE "Electra Cruiser 1 Ladies%"
+GROUP BY product_name, store_name WITH ROLLUP;
 
 
 
