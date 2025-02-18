@@ -82,3 +82,80 @@ FROM customer c
 	JOIN product p
     ON coi.product_id = p.product_id
 WHERE last_name = 'Baldwin';
+
+
+-- 2nd Video
+USE magazine;
+SELECT magazineName, magazinePrice, subscriptionStartDate, subscriberFirstName
+FROM magazine m
+    RIGHT JOIN subscription s
+	ON m.magazineKey = s.magazineKey
+	RIGHT JOIN subscriber sr
+    ON s.subscriberKey = sr.subscriberKey
+UNION
+SELECT magazineName, magazinePrice, subscriptionStartDate, subscriberFirstName
+FROM magazine m
+    LEFT JOIN subscription s
+	ON m.magazineKey = s.magazineKey
+	LEFT JOIN subscriber sr
+    ON s.subscriberKey = sr.subscriberKey;
+    
+    
+-- 3RD Video
+
+USE v_art;
+SELECT COUNT(country), country
+FROM artist
+WHERE country = 'France';
+
+
+USE bike;
+
+SELECT SUM(list_price), MAX(list_price), MIN(list_price)
+FROM product;
+
+SELECT AVG(list_price)
+FROM product
+WHERE model_year = 2017;
+
+SELECT model_year, AVG(list_price)
+FROM product
+WHERE list_price > 2800
+GROUP BY model_year;
+
+SELECT model_year, SUM(list_price)
+FROM product
+WHERE list_price > 2800
+GROUP BY model_year WITH ROLLUP;  -- esto le da una celda final con el avg de las anteriores
+
+SELECT model_year, COUNT(list_price)
+FROM product
+WHERE list_price > 2800
+GROUP BY model_year WITH ROLLUP
+HAVING AVG(list_price) > 4000;  -- EL HAVING FILTRA DESPUES DE QUE LOS GRUPOS FUERON CREADOS
+
+SELECT model_year, FORMAT(AVG(list_price), 2)  -- format convierte los numeros a string, porque les agrega esa coma en el medio
+FROM product
+WHERE list_price > 2800
+GROUP BY model_year WITH ROLLUP
+HAVING AVG(list_price) > 4000;
+
+SELECT model_year, FORMAT(AVG(list_price), 2)
+FROM product
+WHERE product_name LIKE "%speed%"
+GROUP BY model_year WITH ROLLUP
+HAVING AVG(list_price) > 300;
+
+
+USE magazine;
+
+SELECT magazineName, COUNT(subscriberKey) AS suscribers
+FROM magazine m
+	JOIN subscription sn
+    ON m.magazineKey = sn.magazineKey
+GROUP BY magazineName
+HAVING suscribers >= 2;
+
+
+
+
